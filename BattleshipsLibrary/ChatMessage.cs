@@ -7,7 +7,7 @@ using ProtoBuf;
 
 namespace BattleshipsLibrary
 {
-    //Zpráva v chatu, jméno odesílatele
+    //Tin nhắn trò chuyện, tên người gửi
     [ProtoContract]
     public class ChatMessage
     {

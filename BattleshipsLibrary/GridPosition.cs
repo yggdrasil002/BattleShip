@@ -7,18 +7,18 @@ using ProtoBuf;
 
 namespace BattleshipsLibrary
 {
-    //Pozice lodi
+    //Ship position
 
     [ProtoContract]
     public class GridPosition
     {
-        //Souřadnice
+        //Coordinates
         [ProtoMember(1)]
         public int X { get; set; }
         [ProtoMember(2)]
         public int Y { get; set; }
 
-        //Vlastnosti
+        //Features
         [ProtoMember(3)]
         public bool IsHit { get; set; }
         [ProtoMember(4)]
@@ -39,8 +39,9 @@ namespace BattleshipsLibrary
             Y = y;
         }
 
-        //Kontrola, zda jsou pozice stejné
-        //Kontrolují se pouze souřadnice X a Y, nikoliv další proměnné
+
+        //Check if the positions are equal
+        //Only X and Y coordinates are checked, not other variables
         public override int GetHashCode()
         {
             return Convert.ToInt32($"{X}{Y}");

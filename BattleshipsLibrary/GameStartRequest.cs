@@ -7,7 +7,7 @@ using ProtoBuf;
 
 namespace BattleshipsLibrary
 {
-    //Žádost o začátek hry, IP a Port protivníka
+    //Request for start of game, opponent IP and Port
 
     [ProtoContract]
     public class GameStartRequest

@@ -25,7 +25,7 @@ namespace BattleshipsLibrary
             
         }
 
-        //Žádost o připojení přijata, online klienti
+        //Connection request accepted, online clients
         public ConnectResponse(ResponseType responseType, string serverName, List<Client> connectedClients)
         {
             ResponseType = responseType;
@@ -34,7 +34,7 @@ namespace BattleshipsLibrary
             ConnectedClients = connectedClients;
         }
 
-        //Žádost o připojení odmítnuta, důvod
+        //Connection request refused, reason
         public ConnectResponse(ResponseType responseType, string serverName, string response)
         {
             ResponseType = responseType;

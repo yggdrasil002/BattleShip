@@ -7,7 +7,7 @@ using ProtoBuf;
 
 namespace BattleshipsLibrary
 {
-    //Aktualizace pozice, kdo je na řadě
+    //Position update, who's next
 
     [ProtoContract]
     public class GamePositionUpdateInfo

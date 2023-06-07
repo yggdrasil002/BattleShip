@@ -9,15 +9,15 @@ namespace BattleshipsLibrary
 {
     public class Game
     {
-        //Klienti ve hře
+        //Clients in the game
         public Client Client1 { get; set; }
         public Client Client2 { get; set; }
-        
-        //Pozice lodí
+
+        //Position of ships
         public List<GridPosition> Client1ShipPositions;
         public List<GridPosition> Client2ShipPositions;
 
-        //Další proměnné
+        //Other variables
         public bool IsStarted { get; set; }
         public int Id { get; set; }
 
@@ -28,7 +28,7 @@ namespace BattleshipsLibrary
             
         }
 
-        //Začátek hry
+        //Start of the game
         public void StartGame(int id)
         {
             Id = id;
@@ -37,35 +37,35 @@ namespace BattleshipsLibrary
             GameStartInfo client1Info = new GameStartInfo(true, id);
             GameStartInfo client2Info = new GameStartInfo(false, id);
 
-            //Odeslání informace o začátku klientům
+            //Sending start information to clients
             NetworkComms.SendObject("GameStartInfo", Client1.Ip, Client1.Port, client1Info);
             NetworkComms.SendObject("GameStartInfo", Client2.Ip, Client2.Port, client2Info);
         }
 
-        //Kontrola, zda je ve hře klient
+        //Checking if the client is in the game
         public bool HasClient(Client client)
         {
             return (Client1 == client || Client2 == client);
         }
 
-        //Útok na klienta 1
+        //Attack on the client 1
         public void FireOnClient1(GridPosition position)
         {
-            //Trefa do lodi klienta
+            //It hits the client's ship
             if (Client1ShipPositions.Any(x => x.Equals(position)))
             {
-                //Nalezení trefené pozice
+                //Finding the hit position
                 GridPosition pos = Client1ShipPositions.Find(x => x.Equals(position));
-                //Update vlastnosti o trefení
+                //Update properties about hitting
                 pos.IsHit = true;
 
-                //Odeslání pozice oběma klientům + kdo je na řadě
+                //Sending the position to both clients + whose turn it is
                 NetworkComms.SendObject("GamePositionUpdateInfo", Client1.Ip, Client1.Port, new GamePositionUpdateInfo(pos, UpdateType.PlayerGrid, false));
                 NetworkComms.SendObject("GamePositionUpdateInfo", Client2.Ip, Client2.Port, new GamePositionUpdateInfo(pos, UpdateType.EnemyGrid, true));
             }
             else
             {
-                //Nalezení netrefené pozice
+                //Finding a missed position
                 GridPosition pos = new GridPosition(position.X, position.Y);
                 pos.IsMissed = true;
 
@@ -73,7 +73,7 @@ namespace BattleshipsLibrary
                 NetworkComms.SendObject("GamePositionUpdateInfo", Client2.Ip, Client2.Port, new GamePositionUpdateInfo(pos, UpdateType.EnemyGrid, false));
             }
 
-            //Pokud všechny pozice jsou trefené
+            //If all positions are hit
             if (Client1ShipPositions.All(x => x.IsHit))
             {
                 Console.WriteLine($"(Hra #{Id}) {Client2.Name} vyhrál!");
@@ -84,7 +84,7 @@ namespace BattleshipsLibrary
             }
         }
 
-        //Útok na klienta 2
+        //Attack on the client 2
         public void FireOnClient2(GridPosition position)
         {
             if (Client2ShipPositions.Any(x => x.Equals(position)))
