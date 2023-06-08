@@ -7,7 +7,7 @@ using ProtoBuf;
 
 namespace BattleshipsLibrary
 {
-    //Game Start, Game ID
+    //Začátek hry, ID hry
 
     [ProtoContract]
     public class GameStartInfo

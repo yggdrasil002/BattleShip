@@ -6,6 +6,7 @@ using System.Net;
 using BattleshipsLibrary;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
+using static NetworkCommsDotNet.Tools.HostInfo;
 
 namespace BattleshipsServer
 {
@@ -14,6 +15,9 @@ namespace BattleshipsServer
         public static List<Client> Clients = new List<Client>();
         public static List<Game> Games = new List<Game>();
         public static string ServerName = "ServerBattleShip";
+
+        int matches;
+            int win;
 
         private static int _gamesCountId = 0;
 
@@ -31,6 +35,7 @@ namespace BattleshipsServer
             NetworkComms.AppendGlobalIncomingPacketHandler<ChatMessage>("BroadcastChatMessage", BroadcastChatMessageDelgatePointer);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ChallengeRequest", ChallengeRequestDelgatePointer);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("Disconnect", DisconnectDelgatePointer);
+            NetworkComms.AppendGlobalIncomingPacketHandler<string>("History", SendHistory);
             //NetworkComms.AppendGlobalConnectionCloseHandler(ConnectionShutdownDelegate);
 
             //Lắng nghe trên địa chỉ máy tính.
@@ -49,8 +54,7 @@ namespace BattleshipsServer
                 ConnectDB(localEndPoint.Address, i);
 
                 i++;
-                if (i == 5)
-                    break;
+                
             }
 
             //Đóng sau khi nhấn phím
@@ -64,6 +68,11 @@ namespace BattleshipsServer
 
             //Kết thúc quá trình kết nối
             NetworkComms.Shutdown();
+        }
+
+        private static void SendHistory(PacketHeader packetHeader, Connection connection, string incomingObject)
+        {
+            
         }
 
         //Ngắt kết nối máy khách dựa trên yêu cầu
@@ -285,6 +294,34 @@ namespace BattleshipsServer
             command.ExecuteNonQuery();
 
             //Đóng kết nối
+            connection.Close();
+        }
+        private static void History(string name)
+        {
+            //Tạo kết nối với cơ sở dữ liệu
+            string constr = @"Data Source=LAPTOP-R19BP168\SQLEXPRESS;Initial Catalog=IP_Server_Provided;Integrated Security=True";
+            SqlConnection connection = new SqlConnection(constr);
+
+            //Bật kết nối
+            connection.Open();
+
+            //
+            string query = "SELECT * FROM history\nWHERE Username = '"+ name +"'";
+            SqlCommand command = new SqlCommand(query, connection);
+            SqlDataReader reader = command.ExecuteReader();
+
+            //
+            int matches;
+            int win;
+            while (reader.Read())
+            {
+                // Đọc giá trị từng cột trong bản ghi
+                matches = reader.GetInt32(1);   //Truy xuất số trận chơi
+                win = reader.GetInt32(2);   //Truy xuất số trận thắng
+                Console.WriteLine(matches);
+                Console.WriteLine(win);
+            }
+            //Console.WriteLine(matches);
             connection.Close();
         }
     }

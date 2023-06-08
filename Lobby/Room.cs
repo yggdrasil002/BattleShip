@@ -20,7 +20,7 @@ namespace Room
             InitializeComponent();
             MinimumSize = MaximumSize = Size;
 
-            //Con trỏ cho các gói đến
+            //Các con trỏ cho các gói tin đến
             NetworkComms.AppendGlobalConnectionCloseHandler(ConnectionShutdownDelegate);
             NetworkComms.AppendGlobalIncomingPacketHandler<ChatMessage>("DisplayChatMessage", DisplayChatMessageDelegatePointer);
             NetworkComms.AppendGlobalIncomingPacketHandler<string>("ChallengeAcceptRequest", ChallengeAcceptRequestDelegatePointer);
@@ -28,11 +28,11 @@ namespace Room
             NetworkComms.AppendGlobalIncomingPacketHandler<Client>("ChallengeAccepted", ChallengeAcceptedDelegatePointer);
             NetworkComms.AppendGlobalIncomingPacketHandler<List<Client>>("UpdateListInfo", UpdateListInfoDelegatePointer);
 
-            //Cài đặt theo phản hồi từ máy chủ
+            //Cài đặt dựa trên phản hồi từ máy chủ
             lblServerIp.Text = ServerName = response.ServerName;
             lblPlayers.Text = response.ConnectedClients.Count.ToString("00");
 
-            //Điền vào trang tính theo phản hồi từ máy chủ
+            //Đổ dữ liệu từ phản hồi máy chủ vào danh sách
             foreach (var client in response.ConnectedClients)
             {
                 listPlayers.Items.Add(client.Name);
@@ -41,7 +41,7 @@ namespace Room
 
         #region Phương pháp chính
 
-        //Mất kết nối máy chủ
+        //Kết nối đến máy chủ đã bị đóng
         private void ConnectionShutdownDelegate(Connection connection)
         {
             MessageBox.Show($"Connection to server {ServerName} lost!");
@@ -49,16 +49,16 @@ namespace Room
             Application.Exit();
         }
 
-        //Xử lý sự kiện cập nhật danh sách người chơi trực tuyến.
+        //Cập nhật danh sách người chơi trực tuyến - con trỏ gói tin
         private void UpdateListInfoDelegatePointer(PacketHeader packetheader, Connection connection, List<Client> clients)
         {
             Invoke(new UpdateListDelegate(UpdateList), clients);
         }
 
-        //Update online clients - delegate
+        //Cập nhật danh sách người chơi trực tuyến - ủy nhiệm
         private delegate void UpdateListDelegate(List<Client> clients);
 
-        //Updating online clients
+        //Cập nhật danh sách người chơi trực tuyến
         private void UpdateList(List<Client> clients)
         {
             lblPlayers.Text = clients.Count.ToString("00");
@@ -70,16 +70,16 @@ namespace Room
             }
         }
 
-        //Xử lý sự kiện khi yêu cầu thách đấu được chấp nhận bởi người chơi khác.
+        //Yêu cầu chấp nhận được chấp nhận
         private void ChallengeAcceptedDelegatePointer(PacketHeader packetheader, Connection connection, Client enemy)
         {
             Invoke(new OpenGameFormDelegate(OpenGameForm), ServerIp, ServerPort, enemy);
         }
 
-        //Mở cửa sổ trò chơi - đại biểu
+        //Mở form trò chơi - ủy nhiệm
         private delegate void OpenGameFormDelegate(string serverIp, int serverPort, Client enemy);
 
-        //Mở cửa sổ trò chơi khi thách đấu được chấp nhận.
+        //Mở form trò chơi
         private void OpenGameForm(string serverIp, int serverPort, Client enemy)
         {
             Hide();
@@ -123,10 +123,10 @@ namespace Room
             Invoke(new DisplayToChatDelegate(DisplayToChat), message);
         }
 
-        //Tin nhắn đến để trò chuyện - đại biểu
+        //Tin nhắn đến để trò chuyện - ủy nhiệm
         private delegate void DisplayToChatDelegate(ChatMessage message);
 
-        //Tin nhắn trò chuyện đến
+        //Điểm đến tin nhắn trong chat
         private void DisplayToChat(ChatMessage message)
         {
             rtbChat.Text += $"\n{message}";
@@ -154,7 +154,7 @@ namespace Room
 
         #endregion
 
-        #region Form Eventy
+        #region Các sự kiện của Form
 
         //Cài đặt nút chấp nhận
         private void txtMessage_Click(object sender, EventArgs e)   => AcceptButton = btnSend;
@@ -172,7 +172,7 @@ namespace Room
         }
 
 
-        //Thách thức người chơi được đánh dấu
+        //Thách đấu người chơi được đánh dấu
         private void listPlayers_DoubleClick(object sender, EventArgs e)    => Challenge();
         private void btnChallenge_Click(object sender, EventArgs e)         => Challenge();
 

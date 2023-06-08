@@ -11,7 +11,7 @@ namespace BattleshipsLibrary
     [ProtoContract]
     public class Client
     {
-        //Variables
+        //Proměnné
         [ProtoMember(1)]
         public string Name { get; set; }
         [ProtoMember(2)]
@@ -19,7 +19,7 @@ namespace BattleshipsLibrary
         [ProtoMember(3)]
         public int Port { get; set; }
 
-        //Empty constructor due to serializer
+        //Prázdný konstruktor kvůli serializéru
         public Client()
         {
             

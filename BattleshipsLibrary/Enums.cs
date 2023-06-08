@@ -10,8 +10,8 @@ namespace BattleshipsLibrary
 {
     public class Enums
     {
-        //Return enum descriptions, instead of name
-        
+        //Navrácení popisů enumu, místo jména
+        //https://www.codingame.com/playgrounds/2487/c---how-to-display-friendly-names-for-enumerations
         public static string GetDescription(Enum enumName)
         {
             Type enumNameType = enumName.GetType();
@@ -28,7 +28,7 @@ namespace BattleshipsLibrary
         }
     }
 
-    //Type lodi
+    //Typ lodi
     public enum ShipType
     {
         [Description("Nic nevybráno!")]
@@ -50,7 +50,7 @@ namespace BattleshipsLibrary
         Carrier = 5
     }
 
-    //Tile texture
+    //Texture dlaždice
     public enum TileType
     {
         Water,
@@ -63,7 +63,7 @@ namespace BattleshipsLibrary
         ShipSolo
     }
 
-    //Type of ship laying
+    //Typ položení lodi
     public enum PlacementType
     {
         Solo,
@@ -73,14 +73,14 @@ namespace BattleshipsLibrary
         Occupied
     }
 
-    //Updating the player or enemy grid (crosses, circles)
+    //Aktualizace gridu hráče nebo nepřítele (křížky, kolečka)
     public enum UpdateType
     {
         PlayerGrid,
         EnemyGrid
     }
 
-    //The server's response to the connection request
+    //Odpověď serveru na žádost o připojení
     public enum ResponseType
     {
         Accepted,

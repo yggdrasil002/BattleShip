@@ -7,7 +7,7 @@ using ProtoBuf;
 
 namespace BattleshipsLibrary
 {
-    //Information where the hit is aimed, game ID
+    //Informace, kam je mířený zásah, ID hry
 
     [ProtoContract]
     public class GameFireInfo
